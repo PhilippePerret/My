@@ -12,6 +12,9 @@ class My
       when nil, 'help'
         puts "Bientôt ici : l'affichage de l'aide."
         return
+      when 'all', 'tous'
+        display_all
+        return
       when 'code'
         # C'est un code à obtenir
         what = 'code_%s' % CLI.params[1]

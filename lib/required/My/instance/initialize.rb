@@ -27,19 +27,6 @@ class My
   end
   # /display_or_define
 
-  def display
-    puts String::RC*2 + mef_lib_and_value.bleu + String::RC*2
-    puts "(pour modifier cette valeur, utilisez l'option -m/--modifier)"
-  end
-  # /display
-
-  def mef_lib_and_value
-    lib = human_what.capitalize
-    full_lib = '     %s : ' % lib
-    full_lib_len = full_lib.length
-    return full_lib + formated_value(full_lib_len)
-  end
-
   def define
     unless CLI.options[:modifier]
       yesOrNo('Je ne connais pas cette donnée. Voulez-vous la définir ?') || return

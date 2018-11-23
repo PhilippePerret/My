@@ -47,3 +47,11 @@ For example:
 > My street\nMy building\nMy zipcode My Town
 
 ```
+
+## To see all things
+
+```bash
+
+> my all
+
+```
