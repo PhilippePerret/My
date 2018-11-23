@@ -6,11 +6,11 @@ class My
     # Après l'initialisation de l'application, on joue la commande.
     #
     def run
-      puts "Commande : #{CLI.command.inspect}"
-      puts "Paramètres : #{CLI.params.inspect}"
+      # puts "Commande : #{CLI.command.inspect}"
+      # puts "Paramètres : #{CLI.params.inspect}"
       case CLI.command
       when nil, 'help'
-        puts "Je dois afficher l'aide"
+        puts "Bientôt ici : l'affichage de l'aide."
         return
       when 'code'
         # C'est un code à obtenir

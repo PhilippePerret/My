@@ -10,7 +10,10 @@ class My
       data.merge!(what => value)
       save
     end
-    
+    def get what
+      data[what]
+    end
+
     def save
       data
       @data.merge!(updated_at: Time.now)

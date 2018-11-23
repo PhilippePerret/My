@@ -32,3 +32,18 @@ Examples :
 
 * clone this folder
 * run the ./bin/build_command.rb file
+
+
+## Remembre a thing with return(s)
+
+Use `\n`.
+
+For example:
+
+```bash
+
+> my address
+...
+> My street\nMy building\nMy zipcode My Town
+
+```
