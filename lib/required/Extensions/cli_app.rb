@@ -17,6 +17,7 @@ class CLI
     'doc'             => 'document',
     'f'               => 'force',
     'h'               => 'help',
+    'k'               => 'kill',
     'm'               => 'modifier',
     'vb'              => 'verbose',
 

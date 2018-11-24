@@ -14,6 +14,11 @@ class My
       data[what]
     end
 
+    def destroy what
+      data.delete(what)
+      save
+    end
+
     def save
       data
       @data.merge!(updated_at: Time.now)

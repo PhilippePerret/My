@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # encoding: UTF-8
 #
-# CLI 1.2.2
+# CLI 1.2.3
 #
 # Note : l'application doit définir :
 #   class CLI
@@ -148,7 +148,8 @@ class CLI
       self.command= nil
       # log "Commande : #{CLI.command.inspect}"
       self.options  = Hash.new
-      self.params   = (a = Array.new ; a << nil ; a)
+      # self.params   = (a = Array.new ; a << nil ; a)
+      self.params   = Array.new(1, nil)
     end
 
     # Analyse de la ligne de commande
@@ -186,11 +187,17 @@ class CLI
         opt.gsub!(/-/,'_')
       else # is start_with? '-'
         # <= diminutif
-        opt_dim, val = arg[1..-1].strip.split('=')
-        opt = DIM_OPT_TO_REAL_OPT[opt_dim]
-        opt != nil || begin
-          error "L'option #{opt_dim.inspect} est inconnue…"
+        #    (ou cas spécial de '-' tout seul)
+        if arg == '-'
+          traite_arg_as_param(arg)
           return
+        else
+          opt_dim, val = arg[1..-1].strip.split('=')
+          opt = DIM_OPT_TO_REAL_OPT[opt_dim]
+          opt != nil || begin
+            error "L'option #{opt_dim.inspect} est inconnue de CLI… Il faut la définir dans cli_app.rb."
+            return
+          end
         end
       end
       self.options.merge!(opt.to_sym => real_val_of(val))

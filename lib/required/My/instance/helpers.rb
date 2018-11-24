@@ -5,6 +5,10 @@ class My
     @human_what ||= what.split('_').join(' ')
   end
 
+  def reset_and_display
+    self.reset
+    self.display
+  end
   def display
     puts String::RC*2
     simple_display
@@ -24,5 +28,8 @@ class My
     return full_lib + formated_value(full_lib_len)
   end
 
+  def formated_value(retraits)
+    value.gsub(/\\n/, String::RC + ' '*retraits)
+  end
 
 end #/My
