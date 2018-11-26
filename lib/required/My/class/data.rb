@@ -4,19 +4,44 @@
 
 =end
 class My
+
   class << self
 
-    def set what, value
-      data.merge!(what => value)
+    def set whats, value
+      CLI.dbg('--- [My::set] what: %s, value: %s' % [whats.inspect, value.inspect], __FILE__, __LINE__)
+      now = Time.now
+      value.merge!(updated_at: now)
+      data.merge!(updated_at: now)
+      curthing = data
+      whats.each do |key|
+        curthing.key?(key) || curthing.merge!(key => Hash.new)
+        puts "-- data = #{data.inspect}"
+        curthing = curthing[key]
+        puts "-- curthing = #{curthing.inspect}"
+      end
+      # On enregistre enfin la valeur
+      # curthing = value
+      curthing.merge!(value)
+
+      puts data.to_yaml
+      return
+
       save
     end
+
     def get what
       data[what]
     end
 
-    def destroy what
-      data.delete(what)
+    # Détruit la chose +my+
+    def destroy my
+      curthing = my.thing_value
+      my.whats[0..-2].each do |key|
+        curthing = curthing[key]
+      end
+      curthing.delete(my.whats.last)
       save
+      puts "#{my.human_what.inspect} détruit avec succès.".bleu
     end
 
     def save
@@ -38,18 +63,6 @@ class My
       end
     end
     # /data
-
-    def save_data
-      File.open(data_path,'wb'){|f| Marshal.dump(data, f)}
-    end
-
-    def load_data
-      File.open(data_path,'rb'){|f| Marshal.load(f)}
-    end
-
-    def data_path
-      @data_path ||= File.expand_path(File.join(Dir.home,'.my'))
-    end
 
   end #/<< self
 end#/ My

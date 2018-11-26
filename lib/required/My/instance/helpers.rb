@@ -2,13 +2,14 @@ class My
 
 
   def human_what
-    @human_what ||= what.split('_').join(' ')
+    @human_what ||= whats.join(' ')
   end
 
   def reset_and_display
     self.reset
     self.display
   end
+
   def display
     puts String::RC*2
     simple_display
@@ -29,7 +30,7 @@ class My
   end
 
   def formated_value(retraits)
-    value.gsub(/\\n/, String::RC + ' '*retraits)
+    get[:value].gsub(/\\n/, String::RC + ' '*retraits)
   end
 
 end #/My

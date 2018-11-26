@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # encoding: UTF-8
 #
-# CLI 1.2.3
+# CLI 1.3.0
 #
 # Note : l'application doit définir :
 #   class CLI
@@ -16,7 +16,7 @@
 #
 #   Pour afficher un message de debug si l'option -vb/--verbose est
 #   utilisée :
-#     CLI.dbg
+#     CLI.dbg <error|message>[, __FILE__][, __LINE__]
 #   On peut diriger la sortie des débugs vers une autre sortie à l'aide de
 #     CLI.debug_output
 #   … qui peut avoir la valeur :
@@ -91,8 +91,12 @@ class CLI
       true
     end
 
-    def dbg msg
-      VERBOSE || return
+    def dbg msg, file = nil, line = nil
+      verbose? || return
+      if file || line
+        relative_file = file.sub(/#{APPFOLDER}\//, '')
+        msg << ' (%s%s)' % [relative_file, line ? ":#{line}" : '']
+      end
       case self.debug_output
       when nil  then puts msg
       when :log then Debug.write(msg)

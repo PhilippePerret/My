@@ -7,14 +7,29 @@
 
 class My
 
+  # Désignateur de la chose. +what+ est le premier élément. Par exemple,
+  # si on tape `my work`, what est `work`. C'est la chose.
+  # Quand on désigne la chose de façon plus précise on ajoute des
+  # éléments, ils sont consignés dans le +whats+. Par exemple, si on tape
+  # `my work of day`, whats vaudra ['work', 'of', 'day'].
+  # En interne, la donnée sera conservée dans :
+  #   DATAMY = {
+  #     work: {
+  #       of: {
+  #         day: {value: "<la valeur donnée ou à donner>"}
+  #   }}}
   attr_reader :what
-  def initialize what
-    @what = what.downcase
+  attr_reader :whats
+
+  def initialize whats
+    @whats  = whats
+    @what   =  whats.first
+    @what || raise('Impossible que @what soit nil…')
   end
 
   def reset
-    @value    = nil
-    @as_list  = nil
+    @thing_value  = nil
+    @as_list    = nil
   end
 
   # = main =
@@ -28,16 +43,19 @@ class My
     else
       define
     end
-    # puts "---- data : #{self.class.data.inspect}"
   end
   # /display_or_define
 
+  # Note : thing_value retourne toujours une valeur, mais c'est un Hash
+  # vide si la donnée n'existe pas.
   def exist?
-    value != nil
+    !get(create_if_unknown = false).nil?
   end
 
-  def value
-    @value ||= My.get(what)
+  # Retourne true si le what existe (permet par exemple de chercher jusqu'où
+  # un whats est connu)
+  def what_exist?
+    !thing_value.empty?
   end
 
 end #/My

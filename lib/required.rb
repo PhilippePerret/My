@@ -4,6 +4,7 @@
   par l'application elle-même.
 
 =end
+require 'yaml'
 
 APPFOLDER = File.dirname(__dir__)
 

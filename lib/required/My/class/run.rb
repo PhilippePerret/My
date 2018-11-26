@@ -12,38 +12,75 @@ class My
       # puts "Paramètres : #{CLI.params.inspect}"
       # return
 
-      param1 = CLI.params[1] # peut être '+' ou '-' par exemple
+      what = Array.new
 
       case CLI.command
-      when nil, 'help'
-        puts "Bientôt ici : l'affichage de l'aide."
+      when 'help'
+        puts "Bientôt ici : l'affichage du manuel."
         return
       when 'all', 'tous'
         display_all
         return
-      when 'code'
-        # C'est un code à obtenir
-        what = 'code_%s' % CLI.params[1]
       else
         # Sinon, on cherche si la commande comme l'élément à obtenir.
-        # Par exemple `my iban` doit retourner l'IBAN.
-        what = CLI.command
+        # Par exemple `my adresse` doit retourner l'adresse personnelle.
+        whats = [CLI.command]
       end
-      my = new(what)
+
+      # Les options qui interrompent tout
+      case
+      when CLI.options[:kill_all]
+        My.destroy_all
+        return
+      when CLI.options[:help] || CLI.command.nil?
+        puts "Affichage du manuel"
+        return
+      end
+
+      # Pour trouver le what, maintenant que la donnée peut être complexe,
+      # donc, en profondeur, il faut prendre les paramètres jusqu'à trouver
+      # un opérateur ou la fin.
+      iparam = 1
+      until !CLI.params[iparam] || ['-', '+', '='].include?(CLI.params[iparam])
+        whats << CLI.params[iparam]
+        iparam += 1
+      end
+      CLI.dbg("--- [CLI] whats dans ligne commande : #{whats.inspect} (#{CLI.params.inspect})", __FILE__, __LINE__)
+
+      if CLI.params[iparam]
+        operateur = CLI.params[iparam]
+        iparam += 1
+      end
+      CLI.dbg('--- [CLI] operateur : %s ' % operateur, __FILE__, __LINE__)
+
+      if CLI.params[iparam]
+        full_value = CLI.params[iparam..-1].join(' ')
+      end
+      CLI.dbg('--- [CLI] full value : %s' % full_value, __FILE__, __LINE__)
+
+      # +whats+ est toujours une liste de +what+, qui peut en contenir
+      # un ou plusieurs. Le premier est toujours la clé principale de la
+      # chose, celle qui sera utilisée pour obtenir la donnée dans les
+      # données générales, i.e. dans le tableau contenant toutes les
+      # valeurs.
+      my = new(whats)
+
       if CLI.options[:kill]
         my.ask_for_destroy
       else
-        case param1
+        case operateur
         when '='
           # => Définition d'une nouvelle chose
-          my.define(CLI.params[2..-1].join(' '))
-        when '+', '-'
-          # On doit ajouter ou retirer quelque chose à what. Par exemple
-          # 'my work + Un nouveau travail' ajoute 'Un nouveau travail' à work
-          methode = param1 == '+' ? :add : :sup
-          ajout_or_retrait = CLI.params[2..-1].join(' ')
-          my.send(methode, ajout_or_retrait)
+          my.set(full_value)
+        when '+'
+          # Ajout d'une ligne à une chose
+          my.add(full_value)
+        when '-'
+          # Retrait d'une ligne à une chose
+          my.sup(full_value)
         else
+          # Dans tous les autres cas, c'est soit un affichage (si la chose
+          # existe) soit une demande de création (si la chose n'existe pas)
           my.display_or_define
         end
       end

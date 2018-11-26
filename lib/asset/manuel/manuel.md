@@ -38,6 +38,13 @@ Ou :
 my work --kill
 ```
 
+## Détruire toutes les données
+
+```bash
+> my --kill_all
+```
+
+Attention, cette commande détruit vraiment toutes, toutes, toutes les données, il ne restera plus rien. C'est la raison pour laquelle trois confirmations seront demandées.
 
 ### Retours chariot
 
@@ -78,7 +85,7 @@ On peut définir des éléments complexes qui pourraient se définir comme « m
 
 ```bash
 
-> my <chose> <clé> <sous chose> <clé> <sous sous chose> etc.
+> my <chose> <of:|as:> <sous chose> <as:> <type>
 
 ```
 
