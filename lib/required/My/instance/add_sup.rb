@@ -32,13 +32,29 @@ class My
   # /sup
 
   # Méthode appelée pour détruire la donnée
-  # TODO Il faut traiter le cas d'une sous-valeur car ici ça détruit toute
-  # la donnée
+  #
+  # Mais comme ça peut détruire beaucoup de choses en cascade, il faut
+  # faire une vérification et demander confirmation lorsque des sous-éléments
+  # seront détruits
+  #
   def ask_for_destroy
     raise_if_not_exists('Impossible de le détruire.')
-    yesOrNo('Voulez-vous vraiment détruire %s' % whats.inspect) || return
+    confirm_if_cascade || return
     My.destroy(self)
   end
   # /ask_for_destroy
+
+  # Méthode appelée quand on veut détruire le nœud courant.
+  def confirm_if_cascade
+    if node.elements['children'].nil?
+      yesOrNo('Voulez-vous vraiment détruire %s' % human_what.inspect)
+    else
+      nombre_enfants = node.elements['children'].elements['chose'].count
+      msg = ['Cette chose contient %i sous-choses qui seront détruites si vous détruisez celle-ci.' % nombre_enfants]
+      msg << ASK_TABULATION+'Pour voir ses enfants, ajoutez l’option `-c`.'
+      msg << ASK_TABULATION+'Voulez-vous vraiment procéder à cette destruction ?'
+      yesOrNo(msg.join(String::RC))
+    end
+  end
 
 end #/My

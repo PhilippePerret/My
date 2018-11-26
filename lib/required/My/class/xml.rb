@@ -26,7 +26,7 @@ class My
     # Méthode pour construire la base du fichier .my.xml qui va contenir
     # toutes les données
     def build_my_xml
-      puts "---> build_my_xml (création du document XML nécessaire)"
+      CLI.dbg("---> build_my_xml (création du document XML nécessaire)", __FILE__, __LINE__)
       xdoc = REXML::Document.new
       xdoc << REXML::XMLDecl.new
       xdoc.add_element('my')
@@ -35,12 +35,16 @@ class My
       racine.attributes['Updated_at'] = Time.now
       racine.add_element('choses')
       racine.elements['choses'].add_element('children')
-      chose = racine.elements['choses'].elements['children'].add_element('chose')
-      chose.add_element('name').text = 'travail'
-      chose.add_element('value').text = 'Sa bonne valeur dans le fichier.\nSeconde ligne de valeur.'
-      chose.add_element('updated_at').text = Time.now.to_i.to_s
+
+      # # Pour pouvoir essayer tout de suite une valeur
+      # chose = racine.elements['choses'].elements['children'].add_element('chose')
+      # chose.add_element('name').text = 'travail'
+      # chose.add_element('value').text = 'Sa bonne valeur dans le fichier.\nSeconde ligne de valeur.'
+      # chose.add_element('updated_at').text = Time.now.to_i.to_s
       # puts xdoc.to_s
+      
       xdoc.write(output: file_data_ref, indent: 2, transitive: true)
+      return xdoc
     end
     # /build_my_xml
 

@@ -14,6 +14,7 @@ class CLI
   }
   DIM_OPT_TO_REAL_OPT = {
     'bm'              => 'benchmark',
+    'c'               => 'children',
     'doc'             => 'document',
     'f'               => 'force',
     'h'               => 'help',

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Manuel de la commande CLI `My`</title>
+  </head>
+  <body>
+    <h1 id="manuel-de-la-commande-cli-my">MANUEL DE LA COMMANDE CLI My</h1>
+
+<h1 id="description">Description</h1>
+
+<p>La command CLI <code>my</code> permet de définir tout un tas de valeur pour les retrouver de façon très simple, par les deux syntaxes :</p>
+
+<pre><code>    $ my TRUC = "La valeur de mon TRUC."
+    # =&gt; consigne la valeur de la chose 'TRUC'
+</code></pre>
+
+<p>Et pour récupérer la valeur (qui est mise aussi dans le presse-papier) :</p>
+
+<pre><code>    $ my TRUC
+    # =&gt; Affiche "Truc : La valeur de mon TRUC."
+</code></pre>
+
+<h2 id="dfinir-un-nouvel-lment-personnel-une-chose">Définir un nouvel élément personnel (une <em>chose</em>)</h2>
+
+<p>Un nouvel élément personnel se crée avec le signe égal ou tout simplement en ajoutant son nom après la commande <code>my</code> et en jouant entrée.</p>
+
+<pre><code>    $ my chose[ENTRÉE]
+</code></pre>
+
+<p>Si <code>My</code> ne trouve pas “chose” dans ses données, elle demande à créer cette donnée. Il suffit alors de rentrer la valeur et de jouer la touche ENTRÉE.</p>
+
+<p>On peut aussi définir la donnée avec l’opérateur <code>=</code> :</p>
+
+<pre><code>    $ my chose = "C'est ma première chose."
+</code></pre>
+
+<p>Ou même sans les guillemets, mais seulement s’il n’y a pas de guillemets ou en les escapant.</p>
+
+<pre><code>    $ my chose = C\'est ma première chose.
+</code></pre>
+
+<h2 id="afficher-une-chose">Afficher une chose</h2>
+
+<pre><code>    $ my &lt;chose&gt;
+</code></pre>
+
+<p>Par exemple, si la chose “travail” est définie :</p>
+
+<pre><code>    $ my travail
+</code></pre>
+
+<h3 id="afficher-les-enfants-dune-chose">Afficher les “enfants” d’une chose</h3>
+
+<p>Pour afficher les enfants, utiliser l’option <code>-c/--children</code>. Par exemple :</p>
+
+<pre><code>    $ my travail -c
+
+    # ou
+
+    $ my travail --children
+</code></pre>
+
+<p>Note : les enfants, ce sont par exemple les choses comme <code>travail du jour</code> ou <code>travail sur Icare</code>, etc.</p>
+
+<h2 id="dtruire-une-chose-personnelle">Détruire une chose personnelle</h2>
+
+<p>On l’utilise l’option <code>-k/-kill</code> pour supprimer un élément. Par exemple :</p>
+
+<pre><code>    $ my chose -k
+    # =&gt; Détruit 'chose' après confirmation.
+</code></pre>
+
+<p>Ou :</p>
+
+<pre><code>    $ my work --kill
+</code></pre>
+
+<h2 id="dtruire-toutes-les-donnes">Détruire toutes les données</h2>
+
+<pre><code>    $ my --kill_all
+</code></pre>
+
+<p>Attention, cette commande détruit vraiment toutes, toutes, toutes les données, il ne restera plus rien. C’est la raison pour laquelle trois confirmations seront demandées.</p>
+
+<h3 id="retours-chariot">Retours chariot</h3>
+
+<p>Pour ajouter des retours chariot, il suffit d’écrire <code>\n</code> (la balance arrière — \ — s’obtient à l’aide de ALT MAJ / sur Mac).</p>
+
+<h2 id="ajouter-ou-supprimer-des-lments-dans-une-chose">Ajouter ou supprimer des éléments dans une chose</h2>
+
+<p>On ajoute ou on supprime des lignes/éléments à une chose tout simplement avec les opération <code>+</code> et <code>-</code>. La chose doit être définie avant.</p>
+
+<p>Par exemple :</p>
+
+<pre><code>    $ my work[ENTRÉE]
+    $ "Ici mon premier travail"[ENTRÉE]
+</code></pre>
+
+<p>Ensuite :</p>
+
+<pre><code>    $ my work + Un nouveau travail à faire
+    # =&gt; Ajoute le nouveau travail
+</code></pre>
+
+<p>Pour supprimer un élément, on utilise l’opérateur <code>-</code> (moins) en indiquant le début de l’élément à supprimer. Par exemple, si ma chose <code>work</code> possède ‘Aller acheter du pain’, il suffit de taper le code suivant pour le supprimer :</p>
+
+<pre><code>    $ my work - Aller acheter
+</code></pre>
+
+<p>Si deux éléments commencent par le même texte, c’est le premier qui sera éliminer. Pour éliminer seulement le second, allonger la description de la donnée à supprimer.</p>
+
+<h2 id="dfinition-dlments-complexes">Définition d’éléments complexes</h2>
+
+<p>On peut définir des éléments complexes qui pourraient se définir comme « ma date de naissance » ou « ma date de déménagement » grâce à un code ressemblant à :</p>
+
+<pre><code>    $ my &lt;chose&gt; &lt;of:|as:&gt; &lt;sous chose&gt; &lt;as:&gt; &lt;type&gt;
+</code></pre>
+
+<p>Note : pour ne pas confondre une clé avec une chose à plusieurs mots, il suffit de mettre la chose à plusieurs mots entre guillemets. Par exemple :</p>
+
+<pre><code>    $ my "instrument principal"
+    # =&gt; La chose est "instrument principal"
+</code></pre>
+
+<p>… alors que :</p>
+
+<pre><code>    $ my intrument principal
+    # =&gt; La chose est "instrument", "principal" est considéré comme une clé et
+    #    génèrera une erreur.
+</code></pre>
+
+  </body>
+</html>

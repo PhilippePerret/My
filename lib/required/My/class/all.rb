@@ -1,14 +1,6 @@
 class My
   class << self
 
-    # Pour afficher toutes les données mémorisées
-    def display_all
-      puts String::RC*2
-      puts data.to_yaml
-      puts String::RC*2
-    end
-    # /display_all
-
     # Tout détruire (option --kill_all)
     def destroy_all
       raise_if_no_file_data

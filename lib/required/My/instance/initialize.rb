@@ -37,8 +37,9 @@ class My
   end
 
   def reset
-    @node     = nil
-    @as_list  = nil
+    @node           = nil
+    @as_list        = nil
+    @formated_value = nil
   end
 
   # = main =
@@ -47,7 +48,7 @@ class My
   # l'affiche, sinon, on demande à le définir.
   #
   def display_or_define
-    if exist? && !CLI.options[:modifier]
+    if (exist? && !CLI.options[:modifier]) || (CLI.options[:children] && children?)
       display
     else
       define
@@ -58,7 +59,15 @@ class My
   # Note : thing_value retourne toujours une valeur, mais c'est un Hash
   # vide si la donnée n'existe pas.
   def exist?
-    !get(create_if_unknown = false).nil?
+    !get_value.nil?
+  end
+
+  # Retourne true si la chose courante a des enfants. Notée qu'elle peut avoir
+  # des enfants sans pourtant être définie, si elle n'existe que par ses sous-
+  # choses.
+  def children?
+    c = node(false).elements['children']
+    c && c.elements['chose'].count > 0
   end
 
 end #/My

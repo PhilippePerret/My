@@ -38,11 +38,15 @@ class My
     mynode.elements['value'].text = new_value
     mynode.elements['updated_at'].text = Time.now.to_i.to_s
     My.save
+    display
   end
 
   # Retourne la valeur de la chose courante, ou nil si elle n'existe pas
   def get_value
     node(false) || (return nil)
+    # Attention, l'élément peut exister, mais sans valeur (lorsque c'est le
+    # premier what d'une autre chose)
+    node(false).elements['value'].text || (return nil)
     v = node(false).elements['value'].text.strip
     v.empty? ? nil : v
   end

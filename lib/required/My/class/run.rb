@@ -16,7 +16,7 @@ class My
 
       case CLI.command
       when 'help'
-        puts "Bientôt ici : l'affichage du manuel."
+        My.display_manuel
         return
       when 'all', 'tous'
         display_all
@@ -24,16 +24,17 @@ class My
       else
         # Sinon, on cherche si la commande comme l'élément à obtenir.
         # Par exemple `my adresse` doit retourner l'adresse personnelle.
+        CLI.command && CLI.command = CLI.command.downcase
         whats = [CLI.command]
       end
 
       # Les options qui interrompent tout
-      case
+      case true
       when CLI.options[:kill_all]
         My.destroy_all
         return
       when CLI.options[:help] || CLI.command.nil?
-        puts "Affichage du manuel"
+        My.display_manuel
         return
       end
 
@@ -42,7 +43,7 @@ class My
       # un opérateur ou la fin.
       iparam = 1
       until !CLI.params[iparam] || ['-', '+', '='].include?(CLI.params[iparam])
-        whats << CLI.params[iparam]
+        whats << CLI.params[iparam].downcase
         iparam += 1
       end
       CLI.dbg("--- [CLI] whats dans ligne commande : #{whats.inspect} (#{CLI.params.inspect})", __FILE__, __LINE__)
