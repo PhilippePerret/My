@@ -4,8 +4,9 @@ CLI application to remember our things.
 
 ## To build de `my` command
 
-* clone this folder
-* run the ./bin/build_command.rb's file
+* Start your Mac,
+* clone this folder,
+* run the ./bin/build_command.rb's file.
 
 ## Help
 
