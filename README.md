@@ -2,12 +2,36 @@
 
 CLI application to remember our things.
 
+## To build de `my` command
+
+* clone this folder
+* run the ./bin/build_command.rb's file
+
+## Help
+
+```bash
+
+> my
+
+# OR
+
+> my help
+
+# OR
+
+> my -h
+
+```
+
+## Utilisation
+
 Examples :
 
 ```bash
 
 > my IBAN
 # => Display our IBAN code (or ask to remember it)
+# => copy it in the clipboard
 
 ```
 
@@ -17,24 +41,26 @@ Examples :
 > my code Facebook
 # => Display Facebook code (or ask to remember it)
 
+> my pseudo Facebook
+# => Display Facebook pseudo (or ask to remember it)
+
 ```
 
 ## To modify a thing
 
 ```bash
 
+> my Thing = "New value"
+
+# OR
+
 > my Thing -m
 # => As to change it
 
 ```
 
-## To build de `my` command
 
-* clone this folder
-* run the ./bin/build_command.rb file
-
-
-## Remembre a thing with return(s)
+## Remember a thing with return(s)
 
 Use `\n`.
 
@@ -53,5 +79,30 @@ For example:
 ```bash
 
 > my all
+
+```
+
+## To add as a list
+
+```bash
+
+> my liste = "First thing"
+
+> my liste + "Second thing"
+> my liste + "Third thing"
+> my liste
+# =>
+#    liste : First thing
+#            Second thing
+#            Third thing
+
+```
+
+
+## Tout détruire
+
+```bash
+
+> my --kill-all
 
 ```
