@@ -5,20 +5,26 @@ class My
     @human_what ||= whats.join(' ')
   end
 
+  # Retourne la valeur sous forme de liste
+  def as_list
+    @as_list ||= get_value.split(DELIMITER_LINES)
+  end
+
   def reset_and_display
     self.reset
     self.display
   end
 
+  # Affichage de la donnée
   def display
     puts String::RC*2
-    simple_display
+    affichage_formated
     puts String::RC*2
     puts "(pour modifier cette valeur, utilisez l'option -m/--modifier)"
   end
   # /display
 
-  def simple_display
+  def affichage_formated
     puts mef_lib_and_value.bleu
   end
 
@@ -30,7 +36,7 @@ class My
   end
 
   def formated_value(retraits)
-    get[:value].gsub(/\\n/, String::RC + ' '*retraits)
+    get_value.gsub(/\\n/, String::RC + ' '*retraits)
   end
 
 end #/My

@@ -58,12 +58,10 @@ class My
       end
       CLI.dbg('--- [CLI] full value : %s' % full_value, __FILE__, __LINE__)
 
-      # +whats+ est toujours une liste de +what+, qui peut en contenir
-      # un ou plusieurs. Le premier est toujours la clé principale de la
-      # chose, celle qui sera utilisée pour obtenir la donnée dans les
-      # données générales, i.e. dans le tableau contenant toutes les
-      # valeurs.
+      # Instanciation de la chose à partir de son +whats+ c'est-à-dire
+      # son XPath sous forme d'array.
       my = new(whats)
+
 
       if CLI.options[:kill]
         my.ask_for_destroy

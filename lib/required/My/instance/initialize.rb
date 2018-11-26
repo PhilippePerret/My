@@ -13,10 +13,19 @@ class My
   # éléments, ils sont consignés dans le +whats+. Par exemple, si on tape
   # `my work of day`, whats vaudra ['work', 'of', 'day'].
   # En interne, la donnée sera conservée dans :
-  #   DATAMY = {
-  #     work: {
-  #       of: {
-  #         day: {value: "<la valeur donnée ou à donner>"}
+  #   <my Created_at="..." Updated_at="...now...">
+  #     <choses>
+  #       <children>
+  #         <chose Name="work">
+  #           <children>
+  #             <chose Name="of">
+  #               <children>
+  #                 <chose Name="day" Updated_at="...now...">
+  #                   <value>"La valeur donnée ou à donner"</value>
+  #                 </chose>
+  #               </children>
+  #             </chose>
+  #           ...
   #   }}}
   attr_reader :what
   attr_reader :whats
@@ -28,8 +37,8 @@ class My
   end
 
   def reset
-    @thing_value  = nil
-    @as_list    = nil
+    @node     = nil
+    @as_list  = nil
   end
 
   # = main =
@@ -50,12 +59,6 @@ class My
   # vide si la donnée n'existe pas.
   def exist?
     !get(create_if_unknown = false).nil?
-  end
-
-  # Retourne true si le what existe (permet par exemple de chercher jusqu'où
-  # un whats est connu)
-  def what_exist?
-    !thing_value.empty?
   end
 
 end #/My

@@ -16,7 +16,7 @@ class My
 
     # On demande s'il faut vraiment définir cette donnée
     # TODO Il faudrait être plus précis ici et dire jusqu'à quelle clé on
-    # connait le what.
+    # connait le whats.
     if !CLI.options[:modifier] # && new_value.nil?
       yesOrNo('Je ne connais pas la donnée %s. Voulez-vous la définir ?' % human_what.inspect) || return
     end
@@ -24,29 +24,27 @@ class My
     new_value ||= askFor('Donnée à mémoriser pour « %s »' % human_what)
 
     new_value != nil || raise('On ne peut pas enregistrer une valeur vide.')
-    if yesOrNo('Je dois donc donner la valeur %s à %s ?' % [new_value.inspect, human_what.inspect])
-      set(new_value)
-      puts ('Valeur "%s" enregistrée avec succès.' % new_value).bleu
-      display
-    end
+    set(new_value)
+    puts ('Valeur "%s" enregistrée avec succès.' % new_value).bleu
+    display
   end
 
-
-  # def define new_value = nil
-  #
-  #
-  # end
-  # # /define
 
   # On doit donner une nouvelle valeur au whats courant.
   # +new_value+ est toujours un string, mais il sera toujours mis dans
   # un {value: <new value>}
   def set new_value
-    cur_value  = get # cela crée les clés au besoin
-    cur_value.merge!(value: new_value)
-    CLI.dbg('---- [set] Donnée finale : %s' % thing_value.inspect, __FILE__, __LINE__)
-    # My.set(what, thing_value)
-    My.set(whats, {value: new_value})
+    mynode = node(true)
+    mynode.elements['value'].text = new_value
+    mynode.elements['updated_at'].text = Time.now.to_i.to_s
+    My.save
+  end
+
+  # Retourne la valeur de la chose courante, ou nil si elle n'existe pas
+  def get_value
+    node(false) || (return nil)
+    v = node(false).elements['value'].text.strip
+    v.empty? ? nil : v
   end
 
   # Retourne le hash qui contient la valeur actuelle de la cible.
@@ -58,34 +56,60 @@ class My
   # donnée par exemple)
   #
   def get create_if_unknown = true
-    cur_value = thing_value
-    whats.each do |key|
-      cur_value.key?(key) || begin
-        if create_if_unknown
-          cur_value.merge!(key => Hash.new)
+    node(create_if_unknown)
+  end
+
+  # Retourne le nœud courant
+  def node create_if_unknown = true
+    @node ||= begin
+      xmlpath = Array.new(1, '/my/choses')
+      this_node = nil
+      node = My.xmldoc.root.elements['choses']
+      whats.each do |key|
+        this_node = nil
+
+        # Soit le nœud a des enfants, soit il n'en a pas
+        children = node.elements['children']
+        if children.nil?
+          if create_if_unknown
+            # => On doit créer le noeud
+            #    On passe par ici quand la dernière chose n'a pas d'enfants
+            # puts "Je dois créer les enfants du noeud courant"
+            children = node.add_element('children')
+          else
+            # => On ne trouve pas l'élément
+            return nil
+          end
+        end
+        children.each do |chose|
+          if chose.elements['name'].text == key
+            this_node = chose
+            break
+          end
+        end
+        if this_node.nil?
+          # <= Le nœud n'a pas été trouvé
+          # => Si on doit le créer, on le crée. Sinon, on retourne null.
+          if create_if_unknown
+            # puts "Je dois créer le noeud manquant (#{key})"
+            node = children.add_element('chose')
+            node.add_element('name').text = key
+            node.add_element('updated_at').text = Time.now.to_i.to_s
+            node.add_element('value').text = ''
+            this_node = node
+          else
+            return nil
+          end
         else
-          return nil
+          node = this_node
         end
       end
-      cur_value = cur_value[key]
+      # Si on passe ici, c'est qu'on n'a rien trouvé
+      this_node
     end
-    # Quelle que soit la valeur, c'est toujours un hash qui est retourné
-    CLI.dbg('-- [get] cur_value : %s' % cur_value.inspect, __FILE__, __LINE__)
-    return cur_value
   end
+  # /node
 
-  # Retourne la valeur de la chose iniitiale sous forme de Hash
-  # C'est le Hash qui correspond à la première clé de whats
-  #
-  # Attention, cette valeur doit retourner NIL lorsque la chose n'existe
-  # pas, car c'est cette méthode qui sert pour exist?
-  def thing_value
-    @thing_value ||= My.get(what) || Hash.new
-  end
 
-  # Retourne la valeur sous forme de liste
-  def as_list
-    @as_list ||= get.split(DELIMITER_LINES)
-  end
 
 end #/My

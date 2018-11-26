@@ -3,7 +3,7 @@ class My
   # Ajouter l'élément +that+
   def add that
     raise_if_not_exists('Il faut le définir avant d’y ajouter des éléments.')
-    set(get + '\n' + that)
+    set(get_value + '\n' + that)
     reset_and_display
   end
 
@@ -36,7 +36,7 @@ class My
   # la donnée
   def ask_for_destroy
     raise_if_not_exists('Impossible de le détruire.')
-    yesOrNo('Voulez-vous vraiment détruire %s' % what.inspect) || return
+    yesOrNo('Voulez-vous vraiment détruire %s' % whats.inspect) || return
     My.destroy(self)
   end
   # /ask_for_destroy
