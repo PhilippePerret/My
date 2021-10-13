@@ -52,7 +52,7 @@ class My
     @formated_value ||= begin
       headline = String::RC + ' ' * nombre_espaces
       if get_value
-        get_value.gsub(/\\n/, headline)
+        get_value.gsub(/__RC__/, headline)
       end
     end
   end

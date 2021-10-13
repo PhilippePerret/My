@@ -9,6 +9,7 @@ class My
 
   DELIMITER_LINES = '\n'
 
+  ##
   # Quand la donnée est demandée (donc sans '=') et qu'elle n'existe pas,
   # il faut la définir. C'est par ici qu'on passe pour le faire de façon
   # dynamique.
@@ -30,10 +31,14 @@ class My
   end
 
 
+  ##
   # On doit donner une nouvelle valeur au whats courant.
   # +new_value+ est toujours un string, mais il sera toujours mis dans
   # un {value: <new value>}
   def set new_value
+    # puts "new_value avant = #{new_value.inspect}"
+    new_value = new_value.gsub(/\\n/,'__RC__')
+    # puts "new_value après = #{new_value.inspect}"
     mynode = node(true)
     mynode.elements['value'].text = new_value
     mynode.elements['updated_at'].text = Time.now.to_i.to_s

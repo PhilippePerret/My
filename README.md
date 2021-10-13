@@ -63,7 +63,7 @@ Examples :
 
 ## Remember a thing with return(s)
 
-Use `\n`.
+Use `\\n` (2 returns).
 
 For example:
 
@@ -71,7 +71,7 @@ For example:
 
 > my address
 ...
-> My street\nMy building\nMy zipcode My Town
+> My street\\nMy building\\nMy zipcode My Town
 
 ```
 

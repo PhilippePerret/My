@@ -79,7 +79,7 @@ Attention, cette commande détruit vraiment toutes, toutes, toutes les données,
 
 ### Retours chariot
 
-Pour ajouter des retours chariot, il suffit d'écrire `\n` (la balance arrière — \\ — s'obtient à l'aide de ALT MAJ / sur Mac).
+Pour ajouter des retours chariot, il suffit d'écrire `\\n` (2 balances arrière, la balance arrière — \\ — s'obtient à l'aide de ALT MAJ / sur Mac).
 
 
 ## Ajouter ou supprimer des éléments dans une chose
