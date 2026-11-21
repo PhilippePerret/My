@@ -49,8 +49,10 @@ class My
   #
   def display_or_define
     if (exist? && !CLI.options[:modifier]) || (CLI.options[:children] && children?)
-      display
-    else
+      display_and_wait
+    elsif exist?
+      modify
+    elsif !My.search_and_display(human_what, CLI.options[:modifier])
       define
     end
   end

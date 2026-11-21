@@ -19,7 +19,11 @@ class My
     # TODO Il faudrait être plus précis ici et dire jusqu'à quelle clé on
     # connait le whats.
     if !CLI.options[:modifier] # && new_value.nil?
-      yesOrNo('Je ne connais pas la donnée %s. Voulez-vous la définir ?' % human_what.inspect) || return
+      question = "Je ne connais pas la donnée %s. Voulez-vous la définir ? (y/o = oui / n = non / l = liste)" % human_what.inspect
+      case getc(question, expected_keys: ["y","o","n","l"])
+      when "n" then return
+      when "l" then return My.choose_from_list
+      end
     end
 
     new_value ||= askFor('Donnée à mémoriser pour « %s »' % human_what)
@@ -27,7 +31,19 @@ class My
     new_value != nil || raise('On ne peut pas enregistrer une valeur vide.')
     set(new_value)
     puts ('Valeur "%s" enregistrée avec succès.' % new_value).bleu
-    display
+    define_description
+    wait_for_action
+  end
+
+  ##
+  # Définit la description (facultative) de la chose courante
+  def define_description
+    description = askFor('Description (facultative) pour « %s »' % human_what)
+    description.nil? && return
+    mynode = node(true)
+    (mynode.elements['description'] || mynode.add_element('description')).text = description
+    My.save
+    puts 'Description enregistrée.'.bleu
   end
 
 
@@ -43,6 +59,7 @@ class My
     mynode.elements['value'].text = new_value
     mynode.elements['updated_at'].text = Time.now.to_i.to_s
     My.save
+    reset
     display
   end
 

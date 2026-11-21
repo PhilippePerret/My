@@ -33,8 +33,11 @@ class My
       when CLI.options[:kill_all]
         My.destroy_all
         return
-      when CLI.options[:help] || CLI.command.nil?
+      when CLI.options[:help]
         My.display_manuel
+        return
+      when CLI.command.nil?
+        My.choose_from_list
         return
       end
 
@@ -66,6 +69,8 @@ class My
 
       if CLI.options[:kill]
         my.ask_for_destroy
+      elsif CLI.options[:description]
+        my.exist? ? my.define_description : my.raise_if_not_exists('Impossible de le décrire.')
       else
         case operateur
         when '='

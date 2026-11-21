@@ -23,9 +23,43 @@ class My
     puts String::RC*2
     cette_valeur = CLI.options[:children] ? 'une de ces valeurs' : 'cette valeur'
     puts '(pour modifier %s, utilisez l’option -m/--modifier)' % [cette_valeur]
-    get_value && `echo "#{get_value.gsub(/\\n/, String::RC).strip}" | pbcopy`
+    get_value && IO.popen('pbcopy', 'w') { |io| io.write(get_value.gsub(/__RC__/, "\n").strip) }
   end
   # /display
+
+  # Affiche la donnée puis attend l'action suivante
+  def display_and_wait
+    display
+    wait_for_action
+  end
+
+  def wait_for_action
+    case getc('m = modifier la donnée / a = autre donnée / q = finir', expected_keys: ['m','a','q'])
+    when 'm'
+      modify
+    when 'a'
+      My.choose_from_list
+    end
+  end
+
+  # Demande une nouvelle valeur pour la donnée
+  def modify
+    new_name = askFor('Nouveau nom', whats.last)
+    rename(new_name.downcase) if new_name != whats.last
+    current = get_value.to_s.gsub(/__RC__/, '\\n')
+    new_value = askFor('Nouvelle valeur pour « %s »' % human_what, current)
+    new_value != current ? set(new_value) : display
+    wait_for_action
+  end
+
+  # Change le nom (dernier mot) de la donnée
+  def rename(new_name)
+    node(false).elements['name'].text = new_name
+    My.save
+    @whats = whats[0..-2] + [new_name]
+    @what  = whats.first
+    @human_what = nil
+  end
 
   def affichage_formated
     mef = mef_lib_and_value

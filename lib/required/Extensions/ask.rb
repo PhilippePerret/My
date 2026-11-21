@@ -17,10 +17,10 @@ def getc message, options = nil
   puts "\n\n"
   if options[:invite]
     deux_points = [':','?'].include?(options[:invite].strip[-1]) ? '' : ': '
-    print ASK_ON_TWO_LINES % [message, options[:invite], deux_points]
+    print (ASK_ON_TWO_LINES % [message, options[:invite], deux_points]).jaune
   else
     deux_points = [':','?'].include?(message.strip[-1]) ? '' : ': '
-    print ASK_ON_ONE_LINE % [message, deux_points]
+    print (ASK_ON_ONE_LINE % [message, deux_points]).jaune
   end
   while
     if CLI.mode_interactif?
@@ -93,8 +93,8 @@ end
 
 # Pose la +question+ et retourne la réponse, même vide.
 def askFor(question, default = nil)
-  default && question << " (défaut : #{default}) "
-  print "#{question} : "
+  default && question += " (défaut : #{default}) "
+  print "#{question} : ".jaune
   retour = STDIN.gets.strip
   retour == '' && retour = nil
   retour ? retour : default
