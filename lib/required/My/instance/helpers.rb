@@ -21,8 +21,6 @@ class My
     puts String::RC*2
     affichage_formated
     puts String::RC*2
-    cette_valeur = CLI.options[:children] ? 'une de ces valeurs' : 'cette valeur'
-    puts '(pour modifier %s, utilisez l’option -m/--modifier)' % [cette_valeur]
     get_value && IO.popen('pbcopy', 'w') { |io| io.write(get_value.gsub(/__RC__/, "\n").strip) }
   end
   # /display
