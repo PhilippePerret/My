@@ -10,7 +10,17 @@ class My
 
     def save
       xmldoc.root.attributes['Updated_at'] = Time.now
-      xmldoc.write(output: file_data_ref, indent: 2, transitive: true)
+      write_xml(xmldoc)
+    end
+
+    # Écrit le document dans un fichier temporaire puis le renomme, pour
+    # ne jamais laisser un fichier vide ou partiel.
+    def write_xml(doc)
+      out = +''
+      doc.write(output: out, indent: 2, transitive: true)
+      tmp = data_path + '.tmp'
+      File.write(tmp, out)
+      File.rename(tmp, data_path)
     end
 
     def xmldoc
@@ -43,14 +53,11 @@ class My
       # chose.add_element('updated_at').text = Time.now.to_i.to_s
       # puts xdoc.to_s
       
-      xdoc.write(output: file_data_ref, indent: 2, transitive: true)
+      write_xml(xdoc)
       return xdoc
     end
     # /build_my_xml
 
-    def file_data_ref
-      @file_data_ref ||= File.open(data_path, 'wb')
-    end
     def data_path
       @data_path ||= File.expand_path(File.join(Dir.home,'.my.xml'))
     end

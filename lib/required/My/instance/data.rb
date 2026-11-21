@@ -40,10 +40,20 @@ class My
   def define_description
     description = askFor('Description (facultative) pour « %s »' % human_what)
     description.nil? && return
-    mynode = node(true)
-    (mynode.elements['description'] || mynode.add_element('description')).text = description
-    My.save
+    save_description(description)
     puts 'Description enregistrée.'.bleu
+  end
+
+  # Description courante (nil si aucune)
+  def description
+    d = node(false)&.elements&.[]('description')&.text.to_s.strip
+    d.empty? ? nil : d
+  end
+
+  def save_description(desc)
+    mynode = node(true)
+    (mynode.elements['description'] || mynode.add_element('description')).text = desc
+    My.save
   end
 
 

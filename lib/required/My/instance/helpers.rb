@@ -48,6 +48,9 @@ class My
     rename(new_name.downcase) if new_name != whats.last
     current = get_value.to_s.gsub(/__RC__/, '\\n')
     new_value = askFor('Nouvelle valeur pour « %s »' % human_what, current)
+    current_desc = description
+    new_desc = askFor('Nouvelle description pour « %s »' % human_what, current_desc)
+    save_description(new_desc) if new_desc != current_desc
     new_value != current ? set(new_value) : display
     wait_for_action
   end
