@@ -17,7 +17,9 @@ class My
         name = name[0, max_len - 1] + '…' if name.length > max_len
         {name: name, value: whats}
       end
-      whats = TTY::Prompt.new.select('Afficher…'.jaune, choices, filter: true, per_page: 20)
+      choices << {name: "\e[38;5;208mRenoncer\e[0m", value: nil}
+      whats = TTY::Prompt.new.select('Afficher…'.jaune, choices, filter: true, cycle: true, per_page: 20)
+      whats.nil? && return
       modifier ? new(whats).modify : new(whats).display_and_wait
     rescue TTY::Reader::InputInterrupt
       puts ''
